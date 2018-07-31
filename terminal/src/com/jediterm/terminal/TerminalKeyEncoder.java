@@ -1,6 +1,6 @@
 package com.jediterm.terminal;
 
-import com.google.common.base.Ascii;
+import com.jediterm.terminal.util.Ascii;
 import com.jediterm.terminal.util.CharUtils;
 
 import java.awt.event.InputEvent;

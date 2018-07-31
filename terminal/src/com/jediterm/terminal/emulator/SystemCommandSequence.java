@@ -1,17 +1,17 @@
 package com.jediterm.terminal.emulator;
 
-import com.google.common.base.Ascii;
-import com.google.common.collect.Lists;
 import com.jediterm.terminal.TerminalDataStream;
+import com.jediterm.terminal.util.Ascii;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author traff
  */
 public class SystemCommandSequence {
-  private final List<Object> myArgs = Lists.newArrayList();
+  private final List<Object> myArgs = new ArrayList<>();
 
   private final StringBuilder mySequenceString = new StringBuilder();
 

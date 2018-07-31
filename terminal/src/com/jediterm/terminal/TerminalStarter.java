@@ -1,14 +1,15 @@
 package com.jediterm.terminal;
 
-import com.jediterm.terminal.emulator.Emulator;
-import com.jediterm.terminal.emulator.JediEmulator;
-import org.apache.log4j.Logger;
-
-import java.awt.*;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.jediterm.terminal.emulator.Emulator;
+import com.jediterm.terminal.emulator.JediEmulator;
 
 
 /**
@@ -17,7 +18,7 @@ import java.util.concurrent.Executors;
  * @author traff
  */
 public class TerminalStarter implements TerminalOutputStream {
-  private static final Logger LOG = Logger.getLogger(TerminalStarter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TerminalStarter.class);
 
   private final Emulator myEmulator;
 

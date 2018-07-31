@@ -3,7 +3,6 @@
  */
 package com.jediterm.terminal.emulator;
 
-import com.google.common.collect.Lists;
 import com.jediterm.terminal.util.CharUtils;
 import com.jediterm.terminal.TerminalDataStream;
 
@@ -82,7 +81,7 @@ public class ControlSequence {
 
   private void addUnhandled(final char b) {
     if (myUnhandledChars == null) {
-      myUnhandledChars = Lists.newArrayList();
+      myUnhandledChars = new ArrayList<>();
     }
     myUnhandledChars.add(b);
   }

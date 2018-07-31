@@ -1,9 +1,5 @@
 package com.jediterm.terminal.ui;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Supplier;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TerminalDisplay;
 import com.jediterm.terminal.TtyConnector;
@@ -16,9 +12,11 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Executors;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author traff
@@ -34,7 +32,7 @@ public class TabbedTerminalWidget extends JPanel implements TerminalWidget, Term
 
   private TabbedSettingsProvider mySettingsProvider;
 
-  private List<TabListener> myTabListeners = Lists.newArrayList();
+  private List<TabListener> myTabListeners = new ArrayList<>();
   private TerminalActionProvider myNextActionProvider;
 
   private final Predicate<TerminalWidget> myCreateNewSessionAction;
@@ -94,7 +92,7 @@ public class TabbedTerminalWidget extends JPanel implements TerminalWidget, Term
   protected void setupTtyConnectorWaitFor(final TtyConnector ttyConnector, final JediTermWidget widget) {
     new TtyConnectorWaitFor(ttyConnector, Executors.newSingleThreadExecutor()).setTerminationCallback(new Predicate<Integer>() {
       @Override
-      public boolean apply(Integer integer) {
+      public boolean test(Integer integer) {
         if (mySettingsProvider.shouldCloseTabOnLogout(ttyConnector)) {
           closeTab(widget);
         }
@@ -126,7 +124,7 @@ public class TabbedTerminalWidget extends JPanel implements TerminalWidget, Term
   }
 
   private static String generateUniqueName(String suggestedName, TerminalTabs tabs) {
-    final Set<String> names = Sets.newHashSet();
+    final Set<String> names = new HashSet<>();
     for (int i = 0; i < tabs.getTabCount(); i++) {
       names.add(tabs.getTitleAt(i));
     }
@@ -191,14 +189,15 @@ public class TabbedTerminalWidget extends JPanel implements TerminalWidget, Term
   public void closeTab(final JediTermWidget terminal) {
     if (terminal != null) {
       if (myTabs != null && myTabs.indexOfComponent(terminal) != -1) {
-          SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-              removeTab(terminal);
-            }
-          });
+        SwingUtilities.invokeLater(new Runnable() {
+          @Override
+          public void run() {
+            removeTab(terminal);
+          }
+        });
         fireTabClosed(terminal);
-      } else if (myTermWidget == terminal) {
+      }
+      else if (myTermWidget == terminal) {
         myTermWidget = null;
         fireTabClosed(terminal);
       }
@@ -220,7 +219,7 @@ public class TabbedTerminalWidget extends JPanel implements TerminalWidget, Term
   }
 
   private List<JediTermWidget> getAllTerminalSessions() {
-    List<JediTermWidget> session = Lists.newArrayList();
+    List<JediTermWidget> session = new ArrayList<>();
     if (myTabs != null) {
       for (int i = 0; i < myTabs.getTabCount(); i++) {
         session.add(getTerminalPanel(i));
@@ -253,45 +252,45 @@ public class TabbedTerminalWidget extends JPanel implements TerminalWidget, Term
 
   @Override
   public List<TerminalAction> getActions() {
-    return Lists.newArrayList(
-      new TerminalAction("New Session", mySettingsProvider.getNewSessionKeyStrokes(), new Predicate<KeyEvent>() {
-        @Override
-        public boolean apply(KeyEvent input) {
-          handleNewSession();
-          return true;
-        }
-      }).withMnemonicKey(KeyEvent.VK_N),
-      new TerminalAction("Close Session", mySettingsProvider.getCloseSessionKeyStrokes(), new Predicate<KeyEvent>() {
-        @Override
-        public boolean apply(KeyEvent input) {
-          closeCurrentSession();
-          return true;
-        }
-      }).withMnemonicKey(KeyEvent.VK_S),
-      new TerminalAction("Next Tab", mySettingsProvider.getNextTabKeyStrokes(), new Predicate<KeyEvent>() {
-        @Override
-        public boolean apply(KeyEvent input) {
-          selectNextTab();
-          return true;
-        }
-      }).withEnabledSupplier(new Supplier<Boolean>() {
-        @Override
-        public Boolean get() {
-          return myTabs != null && myTabs.getSelectedIndex() < myTabs.getTabCount() - 1;
-        }
-      }),
-      new TerminalAction("Previous Tab", mySettingsProvider.getPreviousTabKeyStrokes(), new Predicate<KeyEvent>() {
-        @Override
-        public boolean apply(KeyEvent input) {
-          selectPreviousTab();
-          return true;
-        }
-      }).withEnabledSupplier(new Supplier<Boolean>() {
-        @Override
-        public Boolean get() {
-          return myTabs != null && myTabs.getSelectedIndex() > 0;
-        }
-      })
+    return new ArrayList<>(
+        Arrays.asList(new TerminalAction("New Session", mySettingsProvider.getNewSessionKeyStrokes(), new Predicate<KeyEvent>() {
+                        @Override
+                        public boolean test(KeyEvent input) {
+                          handleNewSession();
+                          return true;
+                        }
+                      }).withMnemonicKey(KeyEvent.VK_N),
+                      new TerminalAction("Close Session", mySettingsProvider.getCloseSessionKeyStrokes(), new Predicate<KeyEvent>() {
+                        @Override
+                        public boolean test(KeyEvent input) {
+                          closeCurrentSession();
+                          return true;
+                        }
+                      }).withMnemonicKey(KeyEvent.VK_S),
+                      new TerminalAction("Next Tab", mySettingsProvider.getNextTabKeyStrokes(), new Predicate<KeyEvent>() {
+                        @Override
+                        public boolean test(KeyEvent input) {
+                          selectNextTab();
+                          return true;
+                        }
+                      }).withEnabledSupplier(new Supplier<Boolean>() {
+                        @Override
+                        public Boolean get() {
+                          return myTabs != null && myTabs.getSelectedIndex() < myTabs.getTabCount() - 1;
+                        }
+                      }),
+                      new TerminalAction("Previous Tab", mySettingsProvider.getPreviousTabKeyStrokes(), new Predicate<KeyEvent>() {
+                        @Override
+                        public boolean test(KeyEvent input) {
+                          selectPreviousTab();
+                          return true;
+                        }
+                      }).withEnabledSupplier(new Supplier<Boolean>() {
+                        @Override
+                        public Boolean get() {
+                          return myTabs != null && myTabs.getSelectedIndex() > 0;
+                        }
+                      }))
     );
   }
 
@@ -314,7 +313,7 @@ public class TabbedTerminalWidget extends JPanel implements TerminalWidget, Term
   }
 
   private void handleNewSession() {
-    myCreateNewSessionAction.apply(this);
+    myCreateNewSessionAction.test(this);
   }
 
   public static class TabRenamer {
@@ -535,7 +534,8 @@ public class TabbedTerminalWidget extends JPanel implements TerminalWidget, Term
       for (int i = 0; i < myTabs.getTabCount(); i++) {
         getTerminalPanel(i).setTerminalPanelListener(terminalPanelListener);
       }
-    } else if (myTermWidget!= null) {
+    }
+    else if (myTermWidget != null) {
       myTermWidget.setTerminalPanelListener(terminalPanelListener);
     }
     myTerminalPanelListener = terminalPanelListener;
@@ -560,7 +560,7 @@ public class TabbedTerminalWidget extends JPanel implements TerminalWidget, Term
   @Nullable
   private JediTermWidget getTerminalPanel(int index) {
     if (index < myTabs.getTabCount() && index >= 0) {
-      return (JediTermWidget) myTabs.getComponentAt(index);
+      return (JediTermWidget)myTabs.getComponentAt(index);
     }
     else {
       return null;

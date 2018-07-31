@@ -1,8 +1,8 @@
 package com.jediterm.terminal.model.hyperlinks;
 
-import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,7 +24,7 @@ public class LinkResult {
 
   public List<LinkResultItem> getItems() {
     if (myItemList == null) {
-      myItemList = Lists.newArrayList(myItem);
+      myItemList = Arrays.asList(myItem);
     }
     return myItemList;
   }

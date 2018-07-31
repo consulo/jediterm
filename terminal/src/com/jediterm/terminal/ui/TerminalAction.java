@@ -1,12 +1,11 @@
 package com.jediterm.terminal.ui;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Supplier;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author traff
@@ -41,7 +40,7 @@ public class TerminalAction {
     if (myEnabledSupplier != null && !myEnabledSupplier.get()) {
       return false;
     }
-    return myRunnable.apply(e);
+    return myRunnable.test(e);
   }
 
   public static boolean processEvent(TerminalActionProvider actionProvider, final KeyEvent e) {
@@ -146,7 +145,7 @@ public class TerminalAction {
     menuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
-        myRunnable.apply(null);
+        myRunnable.test(null);
       }
     });
     menuItem.setEnabled(isEnabled());

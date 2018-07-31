@@ -1,7 +1,5 @@
 package com.jediterm.terminal.ui;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
 import com.jediterm.terminal.SubstringFinder.FindResult;
 import com.jediterm.terminal.SubstringFinder.FindResult.FindItem;
 import com.jediterm.terminal.*;
@@ -12,8 +10,9 @@ import com.jediterm.terminal.model.TerminalTextBuffer;
 import com.jediterm.terminal.model.hyperlinks.HyperlinkFilter;
 import com.jediterm.terminal.model.hyperlinks.TextProcessing;
 import com.jediterm.terminal.ui.settings.SettingsProvider;
-import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -22,15 +21,18 @@ import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 /**
  * JediTerm terminal widget with UI implemented in Swing.
- * <p/>
+ * <p>
  */
 public class JediTermWidget extends JPanel implements TerminalSession, TerminalWidget, TerminalActionProvider {
-  private static final Logger LOG = Logger.getLogger(JediTermWidget.class);
+  private static final Logger LOG = LoggerFactory.getLogger(JediTermWidget.class);
 
   protected final TerminalPanel myTerminalPanel;
   protected final JScrollBar myScrollBar;
@@ -63,7 +65,8 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
 
     myTextProcessing = new TextProcessing(settingsProvider.getHyperlinkColor(), settingsProvider.getHyperlinkHighlightingMode());
 
-    TerminalTextBuffer terminalTextBuffer = new TerminalTextBuffer(columns, lines, styleState, settingsProvider.getBufferMaxLinesCount(), myTextProcessing);
+    TerminalTextBuffer terminalTextBuffer =
+        new TerminalTextBuffer(columns, lines, styleState, settingsProvider.getBufferMaxLinesCount(), myTextProcessing);
 
     myTerminalPanel = createTerminalPanel(mySettingsProvider, styleState, terminalTextBuffer);
     myTerminal = new JediTerminal(myTerminalPanel, terminalTextBuffer, styleState);
@@ -108,7 +111,9 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
     return styleState;
   }
 
-  protected TerminalPanel createTerminalPanel(@NotNull SettingsProvider settingsProvider, @NotNull StyleState styleState, @NotNull TerminalTextBuffer terminalTextBuffer) {
+  protected TerminalPanel createTerminalPanel(@NotNull SettingsProvider settingsProvider,
+                                              @NotNull StyleState styleState,
+                                              @NotNull TerminalTextBuffer terminalTextBuffer) {
     return new TerminalPanel(settingsProvider, terminalTextBuffer, styleState);
   }
 
@@ -149,7 +154,8 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
   public String getSessionName() {
     if (myTtyConnector != null) {
       return myTtyConnector.getName();
-    } else {
+    }
+    else {
       return "Session";
     }
   }
@@ -158,7 +164,8 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
     if (!mySessionRunning.get()) {
       myEmuThread = new Thread(new EmulatorTask());
       myEmuThread.start();
-    } else {
+    }
+    else {
       LOG.error("Should not try to start session again at this point... ");
     }
   }
@@ -232,14 +239,14 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
 
   @Override
   public List<TerminalAction> getActions() {
-    return Lists.newArrayList(new TerminalAction("Find", mySettingsProvider.getFindKeyStrokes(),
-            new Predicate<KeyEvent>() {
-              @Override
-              public boolean apply(KeyEvent input) {
-                showFindText();
-                return true;
-              }
-            }).withMnemonicKey(KeyEvent.VK_F));
+    return new ArrayList<>(Arrays.asList(new TerminalAction("Find", mySettingsProvider.getFindKeyStrokes(),
+                                                            new Predicate<KeyEvent>() {
+                                                              @Override
+                                                              public boolean test(KeyEvent input) {
+                                                                showFindText();
+                                                                return true;
+                                                              }
+                                                            }).withMnemonicKey(KeyEvent.VK_F)));
   }
 
   private void showFindText() {
@@ -291,16 +298,20 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
             myFindComponent = null;
             myTerminalPanel.setFindResult(null);
             myTerminalPanel.requestFocusInWindow();
-          } else if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER || keyEvent.getKeyCode() == KeyEvent.VK_UP) {
+          }
+          else if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER || keyEvent.getKeyCode() == KeyEvent.VK_UP) {
             myFindComponent.nextFindResultItem(myTerminalPanel.selectNextFindResultItem());
-          } else if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
+          }
+          else if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
             myFindComponent.prevFindResultItem(myTerminalPanel.selectPrevFindResultItem());
-          } else {
+          }
+          else {
             super.keyPressed(keyEvent);
           }
         }
       });
-    } else {
+    }
+    else {
       myFindComponent.getComponent().requestFocusInWindow();
     }
   }
@@ -359,12 +370,15 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
           });
           myTerminalStarter.start();
         }
-      } catch (Exception e) {
+      }
+      catch (Exception e) {
         LOG.error("Exception running terminal", e);
-      } finally {
+      }
+      finally {
         try {
           myTtyConnector.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
         }
         mySessionRunning.set(false);
         myTerminalPanel.setKeyListener(myPreConnectHandler);
@@ -402,8 +416,8 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
       });
 
       myTextField.setPreferredSize(new Dimension(
-              myTerminalPanel.myCharSize.width * 30,
-              myTerminalPanel.myCharSize.height + 3));
+          myTerminalPanel.myCharSize.width * 30,
+          myTerminalPanel.myCharSize.height + 3));
       myTextField.setEditable(true);
 
       updateLabel(null);
@@ -438,7 +452,7 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
     private void updateLabel(FindItem selectedItem) {
       FindResult result = myTerminalPanel.getFindResult();
       label.setText(((selectedItem != null) ? selectedItem.getIndex() : 0)
-              + " of " + ((result != null) ? result.getItems().size() : 0));
+                        + " of " + ((result != null) ? result.getItems().size() : 0));
     }
 
     @Override
@@ -493,7 +507,7 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
         int anchorHeight = Math.max(2, trackBounds.height / modelHeight);
 
         Color color = mySettingsProvider.getTerminalColorPalette()
-                .getColor(mySettingsProvider.getFoundPatternColor().getBackground());
+                                        .getColor(mySettingsProvider.getFoundPatternColor().getBackground());
         g.setColor(color);
         for (FindItem r : result.getItems()) {
           int where = trackBounds.height * r.getStart().y / modelHeight;
@@ -517,11 +531,14 @@ public class JediTermWidget extends JPanel implements TerminalSession, TerminalW
     public void addLayoutComponent(String name, Component comp) {
       if (TERMINAL.equals(name)) {
         terminal = comp;
-      } else if (FIND.equals(name)) {
+      }
+      else if (FIND.equals(name)) {
         find = comp;
-      } else if (SCROLL.equals(name)) {
+      }
+      else if (SCROLL.equals(name)) {
         scroll = comp;
-      } else throw new IllegalArgumentException("unknown component name " + name);
+      }
+      else throw new IllegalArgumentException("unknown component name " + name);
     }
 
     @Override

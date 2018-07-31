@@ -1,13 +1,14 @@
 package com.jediterm.terminal.ui;
 
-import com.google.common.base.Supplier;
-import com.jediterm.terminal.util.Util;
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Map;
+
+import com.jediterm.terminal.util.Util;
 
 /**
  * @author traff

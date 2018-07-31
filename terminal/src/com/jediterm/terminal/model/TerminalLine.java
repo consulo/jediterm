@@ -1,14 +1,16 @@
 package com.jediterm.terminal.model;
 
-import com.google.common.collect.Lists;
-import com.jediterm.terminal.util.CharUtils;
 import com.jediterm.terminal.StyledTextConsumer;
 import com.jediterm.terminal.TextStyle;
+import com.jediterm.terminal.util.CharUtils;
 import com.jediterm.terminal.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * @author traff
@@ -32,7 +34,7 @@ public class TerminalLine {
   public synchronized String getText() {
     final StringBuilder sb = new StringBuilder();
 
-    for (TerminalLine.TextEntry textEntry : Lists.newArrayList(myTextEntries)) {
+    for (TerminalLine.TextEntry textEntry : new ArrayList<>(myTextEntries.entries())) {
       // NUL can only be at the end
       if (textEntry.getText().isNul()) {
         break;
@@ -245,7 +247,7 @@ public class TerminalLine {
   public synchronized void process(int y, StyledTextConsumer consumer, int startRow) {
     int x = 0;
     int nulIndex = -1;
-    for (TextEntry te : Lists.newArrayList(myTextEntries)) {
+    for (TextEntry te : new ArrayList<>(myTextEntries.entries())) {
       if (te.getText().isNul()) {
         if (nulIndex < 0) {
           nulIndex = x;

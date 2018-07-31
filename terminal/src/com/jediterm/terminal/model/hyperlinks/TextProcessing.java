@@ -1,12 +1,12 @@
 package com.jediterm.terminal.model.hyperlinks;
 
-import com.google.common.collect.Lists;
 import com.jediterm.terminal.HyperlinkStyle;
 import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.model.CharBuffer;
 import com.jediterm.terminal.model.TerminalLine;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ public class TextProcessing {
   public TextProcessing(TextStyle hyperlinkColor, HyperlinkStyle.HighlightMode highlightMode) {
     myHyperlinkColor = hyperlinkColor;
     myHighlightMode = highlightMode;
-    myHyperlinkFilter = Lists.newArrayList();
+    myHyperlinkFilter = new ArrayList<>();
   }
 
   public void processHyperlinks(TerminalLine line) {

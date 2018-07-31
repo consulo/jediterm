@@ -1,6 +1,5 @@
 package com.jediterm.terminal.util;
 
-import com.google.common.base.*;
 import com.jediterm.terminal.emulator.charset.*;
 import com.jediterm.terminal.model.*;
 
