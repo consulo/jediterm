@@ -6,7 +6,7 @@
 
   <groupId>consulo.internal</groupId>
   <artifactId>jediterm-group</artifactId>
-  <version>2-SNAPSHOT</version>
+  <version>3-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
