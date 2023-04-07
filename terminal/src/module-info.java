@@ -7,7 +7,9 @@ module jediterm {
     requires org.slf4j;
     requires java.desktop;
 
+    exports com.jediterm.terminal;
     exports com.jediterm.terminal.debug;
+    exports com.jediterm.terminal.emulator;
     exports com.jediterm.terminal.emulator.mouse;
     exports com.jediterm.terminal.emulator.charset;
     exports com.jediterm.terminal.model;
