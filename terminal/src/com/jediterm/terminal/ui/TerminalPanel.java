@@ -68,7 +68,7 @@ public class TerminalPanel extends JComponent implements TerminalDisplay, Clipbo
 
   private TerminalPanelListener myTerminalPanelListener;
 
-  private SettingsProvider mySettingsProvider;
+  protected SettingsProvider mySettingsProvider;
   final private TerminalTextBuffer myTerminalTextBuffer;
 
   final private StyleState myStyleState;
