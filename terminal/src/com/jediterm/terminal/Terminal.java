@@ -1,8 +1,8 @@
 package com.jediterm.terminal;
 
-import com.jediterm.terminal.model.StyleState;
 import com.jediterm.terminal.emulator.mouse.MouseFormat;
 import com.jediterm.terminal.emulator.mouse.MouseMode;
+import com.jediterm.terminal.model.StyleState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,137 +15,139 @@ import java.io.UnsupportedEncodingException;
  * @author traff
  */
 public interface Terminal {
-  Dimension resize(Dimension dimension, RequestOrigin origin);
+    Dimension resize(Dimension dimension, RequestOrigin origin);
 
-  void beep();
+    void beep();
 
-  void backspace();
+    void backspace();
 
-  void horizontalTab();
+    void horizontalTab();
 
-  void carriageReturn();
+    void carriageReturn();
 
-  void newLine();
+    void newLine();
 
-  void mapCharsetToGL(int num);
+    void mapCharsetToGL(int num);
 
-  void mapCharsetToGR(int num);
+    void mapCharsetToGR(int num);
 
-  void designateCharacterSet(int tableNumber, char ch);
+    void designateCharacterSet(int tableNumber, char ch);
 
-  void setAnsiConformanceLevel(int level);
+    void setAnsiConformanceLevel(int level);
 
-  void writeDoubleByte(char[] bytes) throws UnsupportedEncodingException;
+    void writeDoubleByte(char[] bytes) throws UnsupportedEncodingException;
 
-  void writeCharacters(String string);
+    void writeCharacters(String string);
 
-  int distanceToLineEnd();
+    int distanceToLineEnd();
 
-  void reverseIndex();
+    void reverseIndex();
 
-  void index();
+    void index();
 
-  void nextLine();
+    void nextLine();
 
-  void fillScreen(char c);
+    void fillScreen(char c);
 
-  void saveCursor();
+    void saveCursor();
 
-  void restoreCursor();
+    void restoreCursor();
 
-  void reset();
+    void reset();
 
-  void characterAttributes(TextStyle textStyle);
+    void characterAttributes(TextStyle textStyle);
 
-  void setScrollingRegion(int top, int bottom);
+    void setScrollingRegion(int top, int bottom);
 
-  void scrollUp(int count);
+    void scrollUp(int count);
 
-  void scrollDown(int count);
+    void scrollDown(int count);
 
-  void resetScrollRegions();
+    void resetScrollRegions();
 
-  void cursorHorizontalAbsolute(int x);
+    void cursorHorizontalAbsolute(int x);
 
-  void linePositionAbsolute(int y);
+    void linePositionAbsolute(int y);
 
-  void cursorPosition(int x, int y);
+    void cursorPosition(int x, int y);
 
-  void cursorUp(int countY);
+    void cursorUp(int countY);
 
-  void cursorDown(int dY);
+    void cursorDown(int dY);
 
-  void cursorForward(int dX);
+    void cursorForward(int dX);
 
-  void cursorBackward(int dX);
+    void cursorBackward(int dX);
 
-  void eraseInLine(int arg);
+    void eraseInLine(int arg);
 
-  void deleteCharacters(int count);
+    void deleteCharacters(int count);
 
-  int getTerminalWidth();
+    int getTerminalWidth();
 
-  int getTerminalHeight();
+    int getTerminalHeight();
 
-  void eraseInDisplay(int arg);
+    void eraseInDisplay(int arg);
 
-  void setModeEnabled(TerminalMode mode, boolean enabled);
+    void setModeEnabled(TerminalMode mode, boolean enabled);
 
-  void disconnected();
+    void disconnected();
 
-  int getCursorX();
+    int getCursorX();
 
-  int getCursorY();
+    int getCursorY();
 
-  void singleShiftSelect(int num);
+    void singleShiftSelect(int num);
 
-  void setWindowTitle(String name);
+    void setWindowTitle(String name);
 
-  void setCurrentPath(String path);
+    void setCurrentPath(String path);
 
-  void clearScreen();
+    void clearScreen();
 
-  void setCursorVisible(boolean visible);
+    void setCursorVisible(boolean visible);
 
-  void useAlternateBuffer(boolean enabled);
+    void useAlternateBuffer(boolean enabled);
 
-  byte[] getCodeForKey(int key, int modifiers);
+    byte[] getCodeForKey(int key, int modifiers);
 
-  void setApplicationArrowKeys(boolean enabled);
+    void setApplicationArrowKeys(boolean enabled);
 
-  void setApplicationKeypad(boolean enabled);
+    void setApplicationKeypad(boolean enabled);
 
-  void setAutoNewLine(boolean enabled);
+    void setAutoNewLine(boolean enabled);
 
-  StyleState getStyleState();
+    StyleState getStyleState();
 
-  void insertLines(int count);
+    void insertLines(int count);
 
-  void deleteLines(int count);
+    void deleteLines(int count);
 
-  void setBlinkingCursor(boolean enabled);
+    void setBlinkingCursor(boolean enabled);
 
-  void eraseCharacters(int count);
+    void eraseCharacters(int count);
 
-  void insertBlankCharacters(int count);
+    void insertBlankCharacters(int count);
 
-  void clearTabStopAtCursor();
+    void clearTabStopAtCursor();
 
-  void clearAllTabStops();
+    void clearAllTabStops();
 
-  void setTabStopAtCursor();
+    void setTabStopAtCursor();
 
-  void writeUnwrappedString(String string);
+    void writeUnwrappedString(String string);
 
-  void setTerminalOutput(@Nullable TerminalOutputStream terminalOutput);
+    void setTerminalOutput(@Nullable TerminalOutputStream terminalOutput);
 
-  void setMouseMode(@NotNull MouseMode mode);
+    void setMouseMode(@NotNull MouseMode mode);
 
-  void setMouseFormat(MouseFormat mouseFormat);
+    void setMouseFormat(MouseFormat mouseFormat);
 
-  void setAltSendsEscape(boolean enabled);
+    void setAltSendsEscape(boolean enabled);
 
-  void deviceStatusReport(String str);
+    void deviceStatusReport(String str);
 
-  void deviceAttributes(byte[] response);
+    void deviceAttributes(byte[] response);
+
+    void setBracketedPasteMode(boolean enabled);
 }
